@@ -7,7 +7,7 @@ from wtforms import (
     DateTimeField,
     BooleanField,
 )
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, Regexp
 
 
 class ShowForm(Form):
@@ -79,7 +79,13 @@ class VenueForm(Form):
         ],
     )
     address = StringField("address", validators=[DataRequired()])
-    phone = StringField("phone")
+    phone = StringField(
+        "phone",
+        validators=[
+            DataRequired(),
+            Regexp("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"),
+        ],
+    )
     image_link = StringField("image_link")
     genres = SelectMultipleField(
         # TODO implement enum restriction
@@ -108,7 +114,9 @@ class VenueForm(Form):
         ],
     )
     facebook_link = StringField("facebook_link", validators=[URL()])
-    website_link = StringField("website_link")
+    website_link = StringField(
+        "website_link", validators=[URL(message="Must be a valud url")]
+    )
 
     seeking_talent = BooleanField("seeking_talent")
 
@@ -177,7 +185,11 @@ class ArtistForm(Form):
     )
     phone = StringField(
         # TODO implement validation logic for phone
-        "phone"
+        "phone",
+        validators=[
+            DataRequired(),
+            Regexp("^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$"),
+        ],
     )
     image_link = StringField("image_link")
     genres = SelectMultipleField(
@@ -211,7 +223,9 @@ class ArtistForm(Form):
         validators=[URL()],
     )
 
-    website_link = StringField("website_link")
+    website_link = StringField(
+        "website_link", validators=[URL(message="Must be a valud url")]
+    )
 
     seeking_venue = BooleanField("seeking_venue")
 

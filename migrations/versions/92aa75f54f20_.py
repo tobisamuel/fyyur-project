@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1fd024617fcc
-Revises: f900fa4a6894
-Create Date: 2022-05-28 07:28:07.087417
+Revision ID: 92aa75f54f20
+Revises: 4efe50154854
+Create Date: 2022-05-30 20:06:28.396010
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1fd024617fcc'
-down_revision = 'f900fa4a6894'
+revision = '92aa75f54f20'
+down_revision = '4efe50154854'
 branch_labels = None
 depends_on = None
 
@@ -42,10 +42,7 @@ def upgrade():
     op.alter_column('artists', 'phone',
                existing_type=sa.VARCHAR(length=120),
                nullable=False)
-    op.alter_column('artists', 'genres',
-               existing_type=sa.VARCHAR(length=120),
-               nullable=False)
-    op.add_column('venues', sa.Column('genres', sa.String(), nullable=False))
+    op.add_column('venues', sa.Column('genres', sa.ARRAY(sa.String()), nullable=False))
     op.add_column('venues', sa.Column('website', sa.String(length=120), nullable=True))
     op.add_column('venues', sa.Column('seeking_talent', sa.Boolean(), nullable=False))
     op.add_column('venues', sa.Column('seeking_description', sa.String(length=120), nullable=True))
@@ -88,9 +85,6 @@ def downgrade():
     op.drop_column('venues', 'seeking_talent')
     op.drop_column('venues', 'website')
     op.drop_column('venues', 'genres')
-    op.alter_column('artists', 'genres',
-               existing_type=sa.VARCHAR(length=120),
-               nullable=True)
     op.alter_column('artists', 'phone',
                existing_type=sa.VARCHAR(length=120),
                nullable=True)
